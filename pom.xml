@@ -6,7 +6,20 @@
 
     <groupId>org.cab</groupId>
     <artifactId>cab-parent</artifactId>
+    <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
+    <modules>
+        <module>cab-common</module>
+        <module>cab-api</module>
+        <module>cab-user</module>
+        <module>cab-demand</module>
+        <module>cab-order</module>
+        <module>cab-upload</module>
+        <module>cab-playcenter</module>
+        <module>cab-prizecenter</module>
+        <module>cab-search</module>
+        <module>cab-authen</module>
+    </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
