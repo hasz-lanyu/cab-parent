@@ -31,7 +31,6 @@
 
 
 ### FAQ
-* [相关问题](https://github.com/paascloud/paascloud-master/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
 
 ## 配套项目
 
