@@ -1,0 +1,31 @@
+dubbo:
+  application:
+    name: cab-user
+  protocol:
+    port: 20810
+    name: dubbo
+  registry:
+    address: zookeeper://192.168.1.103:2181
+  consumer:
+    timeout: 10000
+  provider:
+    timeout: 10000
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+spring:
+  rabbitmq:
+    host: 192.168.1.103
+  redis:
+    host: 192.168.1.103
+
+snowflake:
+  datacenterid: 1
+  machineid: 1
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+

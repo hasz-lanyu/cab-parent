@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <!--logo-->
+  <link rel="shortcut icon" th:href="@{/static/icon/favicon.ico}"/>
+  <title>CAB后台管理</title>
+  <!--css-->
+  <div th:include="~{include/common::#css}"></div>
+  <style>
+    /* 表格样式 */
+
+    .table > tbody > tr > td {
+      border-width: 2px;
+      text-align: center;
+      margin: 10px;
+      height: 1px;
+      max-height: 20px;
+      font-size: 14px;
+      font-style: inherit;
+    }
+
+    .bootstrap-table .table thead > tr > th {
+      text-align: center;
+    }
+
+    .table thead {
+      background: #a8a8a8;
+      height: 0%;
+      font-size: 13px;
+      font-style: inherit;
+    }
+  </style>
+</head>
+
+<body class="hold-transition sidebar-mini ">
+<div class="wrapper">
+  <!--导航栏-->
+  <div th:replace="~{include/common::navbar}"></div>
+
+
+
+
+<!--&lt;!&ndash;  &lt;!&ndash;内容&ndash;&gt;-->
+  <div id="content">
+
+   <!-- <div class="content-wrapper"  >
+    &lt;!&ndash; 内容标题（页面标题） &ndash;&gt;
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-6">&ndash;&gt;-->
+        <div th:replace="~{include/common::leave}"></div>
+
+<!--
+        </div>
+      </div>
+    </div>
+  </div>-->
+  </div>
+
+
+
+
+
+
+
+
+  <!--侧边栏-->
+  <div th:replace="~{include/common::sidebar}"></div>
+  <!--页脚-->
+  <div th:replace="~{include/common::footer}"></div>
+</div>
+<!--js-->
+
+<div th:include="~{include/common::#js}"></div>
+<script type="text/javascript">
+
+
+
+</script>
+</body>
+</html>

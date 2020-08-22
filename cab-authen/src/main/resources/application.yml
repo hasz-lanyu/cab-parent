@@ -1,0 +1,10 @@
+dubbo:
+  application:
+    name: cab-authen
+  protocol:
+    name: dubbo
+    port: 20800
+  registry:
+    address: zookeeper://192.168.1.103:2181
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml

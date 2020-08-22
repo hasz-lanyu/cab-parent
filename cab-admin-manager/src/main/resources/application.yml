@@ -1,0 +1,63 @@
+server:
+  port: 9000
+spring:
+  thymeleaf:
+    cache: false
+  mvc:
+    static-path-pattern: /static/**
+    hiddenmethod:
+      filter:
+        enabled: true
+  redis:
+    host: 192.168.1.103
+  rabbitmq:
+    host: 192.168.1.103
+    publisher-confirms: true
+    listener:
+      direct:
+        acknowledge-mode: manual
+    publisher-returns: true
+    virtual-host: /
+  activiti:
+    check-process-definitions: true #这是自动会找resource下processes文件中的流程定义文件去部署
+    database-schema-update: true  #表不存在 自动创建
+    history-level: full  #最高级别历史数据保存
+
+dubbo:
+  application:
+    name: cab-admin-manager
+    qos-enable: false
+    qos-port: 44444
+    qos-accept-foreign-ip: false
+  registry:
+    address: zookeeper://192.168.1.103:2181
+  consumer:
+    check: false
+    timeout: 10000
+
+
+
+snowflake:
+  datacenterid: 1
+  machineid: 1
+ali:
+  oss:
+    endpoint: oss-cn-shenzhen.aliyuncs.com
+    accessKeyId: LTAI4GFAFcmvi6gtfix8GuVA
+    accessKeySecret: d8FxSRYXoe0JityAZ6DqfKFYHt1sFt
+    bucketName: zhanguoheng
+    schema: https
+#限制图片上传大小 单位kb
+img:
+  size: 500
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+
+
+
+
+

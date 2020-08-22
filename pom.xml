@@ -6,8 +6,8 @@
 
     <groupId>org.cab</groupId>
     <artifactId>cab-parent</artifactId>
-    <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <modules>
         <module>cab-common</module>
         <module>cab-api</module>
@@ -19,13 +19,14 @@
         <module>cab-prizecenter</module>
         <module>cab-search</module>
         <module>cab-authen</module>
+        <module>cab-admin-manager</module>
+        <module>cab-generator</module>
     </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter</artifactId>
         <version>2.1.6.RELEASE</version>
-        <relativePath/>
     </parent>
 
     <properties>
@@ -37,12 +38,12 @@
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <java.version>1.8</java.version>
         <junit.version>4.12</junit.version>
-        <spring.version>5.0.2.RELEASE</spring.version>
-        <mybatis.version>3.4.5</mybatis.version>
-        <mysql.version>5.1.6</mysql.version>
-        <dubbo.version>2.6.2</dubbo.version>
+        <tk-mybatis.version>2.1.5</tk-mybatis.version>
+        <mysql.version>5.1.40</mysql.version>
+        <dubbo-starter.version>0.2.0</dubbo-starter.version>
         <zookeeper.version>3.4.10</zookeeper.version>
-        <slf4j.version>1.8.0-alpha2</slf4j.version>
+        <curator-framework.version>2.10.0</curator-framework.version>
+        <slf4j.version>1.7.30</slf4j.version>
         <jackson.version>2.9.1</jackson.version>
         <joda-time.version>2.9.9</joda-time.version>
         <commons-lang3.version>3.5</commons-lang3.version>
@@ -51,12 +52,83 @@
         <swagger2.version>2.7.0</swagger2.version>
         <swagger-ui.version>2.7.0</swagger-ui.version>
         <elasticsearch.version>6.2.3</elasticsearch.version>
-        <log4j.version>2.9.1</log4j.version>
-        <shiro.version>1.4.0</shiro.version>
+        <shiro-starter.version>1.4.1</shiro-starter.version>
         <fastDFS.version>1.26.1-RELEASE</fastDFS.version>
+        <sharding.version>2.0.3</sharding.version>
+        <curator-recipes.version>4.2.0</curator-recipes.version>
+        <shiro-tag.version>2.0.0</shiro-tag.version>
+        <ali-oss.version>3.10.2</ali-oss.version>
+        <shiro.version>1.3.2</shiro.version>
+        <activiti.version>6.0.0</activiti.version>
+        <vaild.version>6.0.8.Final</vaild.version>
+
     </properties>
     <dependencyManagement>
         <dependencies>
+            <!-- https://mvnrepository.com/artifact/org.activiti/activiti-spring-boot-starter-basic -->
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring-boot-starter-basic</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${vaild.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-all</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${ali-oss.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.theborakompanioni</groupId>
+                <artifactId>thymeleaf-extras-shiro</artifactId>
+                <version>${shiro-tag.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>${curator-recipes.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-framework</artifactId>
+                <version>${curator-framework.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${zookeeper.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-log4j12</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/tk.mybatis/mapper-spring-boot-starter -->
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-spring-boot-starter</artifactId>
+                <version>${tk-mybatis.version}</version>
+            </dependency>
+
+            <dependency>
+                <!-- https://mvnrepository.com/artifact/com.alibaba.boot/dubbo-spring-boot-starter -->
+                <groupId>com.alibaba.boot</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo-starter.version}</version>
+            </dependency>
+
             <!-- 分页助手启动器 -->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
@@ -64,38 +136,6 @@
                 <version>${pagehelper-starter.version}</version>
             </dependency>
 
-            <!-- spring -->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-beans</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jdbc</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aspects</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context-support</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
 
             <!--FastDFS客户端-->
             <dependency>
@@ -128,12 +168,6 @@
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
-            <!-- log -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>joda-time</groupId>
@@ -146,22 +180,12 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io.version}</version>
-            </dependency>
 
             <!--mybatis-->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis-starter-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>${mybatis.version}</version>
             </dependency>
 
             <!-- mySql -->
@@ -171,16 +195,10 @@
                 <version>${mysql.version}</version>
             </dependency>
 
-            <!-- rpc -->
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>dubbo</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.zookeeper</groupId>
-                <artifactId>zookeeper</artifactId>
-                <version>${zookeeper.version}</version>
+                <groupId>io.shardingjdbc</groupId>
+                <artifactId>sharding-jdbc-core</artifactId>
+                <version>${sharding.version}</version>
             </dependency>
 
             <!-- swagger2 -->
@@ -201,22 +219,31 @@
                 <artifactId>transport</artifactId>
                 <version>${elasticsearch.version}</version>
             </dependency>
-            <!-- log4j 2 -->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-core</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
             <!-- shiro -->
+            <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-spring-boot-web-starter -->
             <dependency>
                 <groupId>org.apache.shiro</groupId>
-                <artifactId>shiro-all</artifactId>
-                <version>${shiro.version}</version>
+                <artifactId>shiro-spring-boot-web-starter</artifactId>
+                <version>${shiro-starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -227,6 +254,7 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
@@ -247,5 +275,6 @@
             </properties>
         </profile>
     </profiles>
+
 
 </project>

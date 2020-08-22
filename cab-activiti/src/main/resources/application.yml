@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    password: root
+    url: jdbc:mysql://192.168.1.103:3307/sdf?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+  activiti:
+    database-schema-update: true
+    history-level: full
+    check-process-definitions: true
+logging:
+  level:
+    org.springframework: warn
+    org.activiti: warn

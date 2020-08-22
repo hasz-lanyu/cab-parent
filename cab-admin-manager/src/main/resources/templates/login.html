@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>CAB</title>
+  <!--logo-->
+  <link rel="shortcut icon" th:href="@{/static/icon/favicon.ico}"/>
+  <link rel="stylesheet" th:href="@{~/static/css/log.css}" href="../static/css/log.css"/>
+
+</head>
+<body>
+
+<div id="containers">
+  <div id="stage">
+    <div id="shape" class="cube backfaces">
+      <hr>
+      <div id="a" class="plane one">C</div>
+      <div id="b" class="plane two">A</div>
+      <div id="c" class="plane three">B</div>
+      <div id="d" class="plane four">C</div>
+      <div id="e" class="plane five">A</div>
+      <div id="f" class="plane six">B</div>
+      <div id="g" class="plane seven">C</div>
+      <div id="h" class="plane eight">A</div>
+      <div id="i" class="plane nine">B</div>
+      <div id="j" class="plane ten">C</div>
+      <div id="k" class="plane eleven">A</div>
+      <div id="l" class="plane twelve">B</div>
+      <h2 style="font-size: 80px">CAB</h2>
+      <div  style=" text-align:center;color: #797375; font-size: 20px;font-style:
+      oblique "id="date"></div>
+
+      <hr>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div>
+    <div class="row">
+      <div class="col-md-offset-3 col-md-6">
+        <form  id="loginForm" class="form-horizontal">
+          <span class="heading"> </span>
+          <div class="form-group">
+            <input type="text" class="form-control input" id="username" name="username"
+                   placeholder="　登　录　账　号">
+            <i class="fa fa-user"></i>
+          </div>
+
+          <div class="form-group help">
+            <input type="password" class="form-control" id="password" name="password" placeholder="　账　户　密　码">
+            <i class="fa fa-lock"></i>
+            <a href="#" class="fa fa-question-circle"></a><br>
+          </div>
+          <div class="form-group">
+            <button type="button" th:onclick="login()"
+                    class="btn small" ><span
+                    class="loginfont">登 录</span>
+            </button>
+          </div>
+          <input type="checkbox" id="rememberMe" name="rememberMe" checked="checked"><span class="loginfont">记住我
+        </span><br>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script th:src="@{~/static/jquery/jquery.min.js}" src="../static/jquery/jquery.min.js"></script>
+<script th:src="@{~/static/jquery/layer/layer.js} " src="../static/jquery/layer/layer.js"></script>
+<script>
+   function login() {
+    var username = $("#username").val();
+    var password = $("#password").val();
+    var rememberMe = $("#rememberMe").is(':checked');
+    $.ajax({
+      type: "POST",
+      url: '/dologin',
+      contentType: 'application/json',
+
+      data: JSON.stringify({
+        'username': username,
+        'password': password,
+        'rememberMe': rememberMe
+      }),
+      beforeSend: function () {
+        layer.msg('login...',{time:2000})
+      },
+      success: function (r) {
+        if (r.code == 200) {
+          window.location.href='/'
+        }else if(r.code==500){
+          layer.msg(r.message,{time:2000})
+        }
+      }
+
+    },JSON)
+  }
+</script>
+<script type="text/javascript" charset="utf-8">
+
+  window.setInterval(function () {
+    removeClassName(shape, 'backfaces');
+    toggleShape();
+    addClassName(shape, 'backfaces');
+    setTimeout(function () {
+      removeClassName(shape, 'backfaces');
+    }, 3000);
+    setTimeout(function () {
+      document.getElementById("a").innerHTML = "C";
+      document.getElementById("b").innerHTML = "A";
+      document.getElementById("c").innerHTML = "B";
+      document.getElementById("d").innerHTML = "C";
+      document.getElementById("e").innerHTML = "A";
+      document.getElementById("f").innerHTML = "B";
+      document.getElementById("g").innerHTML = "C";
+      document.getElementById("h").innerHTML = "A";
+      document.getElementById("i").innerHTML = "B";
+      document.getElementById("j").innerHTML = "C";
+      document.getElementById("k").innerHTML = "A";
+      document.getElementById("l").innerHTML = "B";
+
+    }, 1500);
+    setTimeout(function () {
+      document.getElementById("a").innerHTML = "A";
+      document.getElementById("b").innerHTML = "b";
+      document.getElementById("c").innerHTML = "C";
+      document.getElementById("d").innerHTML = "A";
+      document.getElementById("e").innerHTML = "B";
+      document.getElementById("f").innerHTML = "C";
+      document.getElementById("g").innerHTML = "A";
+      document.getElementById("h").innerHTML = "B";
+      document.getElementById("i").innerHTML = "C";
+      document.getElementById("j").innerHTML = "A";
+      document.getElementById("k").innerHTML = "B";
+      document.getElementById("l").innerHTML = "C";
+
+    }, 2100);
+    setTimeout(function () {
+      document.getElementById("a").innerHTML = "B";
+      document.getElementById("b").innerHTML = "C";
+      document.getElementById("c").innerHTML = "A";
+      document.getElementById("d").innerHTML = "B";
+      document.getElementById("e").innerHTML = "C";
+      document.getElementById("f").innerHTML = "A";
+      document.getElementById("g").innerHTML = "B";
+      document.getElementById("h").innerHTML = "C";
+      document.getElementById("i").innerHTML = "A";
+      document.getElementById("j").innerHTML = "B";
+      document.getElementById("k").innerHTML = "C";
+      document.getElementById("l").innerHTML = "A";
+
+    }, 2700);
+
+  }, 4500);
+
+  window.setInterval(function () {
+    document.getElementById("a").innerHTML = "A";
+    document.getElementById("b").innerHTML = "B";
+    document.getElementById("c").innerHTML = "C";
+    document.getElementById("d").innerHTML = "A";
+    document.getElementById("e").innerHTML = "B";
+    document.getElementById("f").innerHTML = "C";
+    document.getElementById("g").innerHTML = "A";
+    document.getElementById("h").innerHTML = "B";
+    document.getElementById("i").innerHTML = "C";
+    document.getElementById("j").innerHTML = "A";
+    document.getElementById("k").innerHTML = "B";
+    document.getElementById("l").innerHTML = "C";
+
+  }, 600);
+  window.setInterval(function () {
+    document.getElementById("a").innerHTML = "b";
+    document.getElementById("b").innerHTML = "c";
+    document.getElementById("c").innerHTML = "a";
+    document.getElementById("d").innerHTML = "b";
+    document.getElementById("e").innerHTML = "c";
+    document.getElementById("f").innerHTML = "a";
+    document.getElementById("g").innerHTML = "b";
+    document.getElementById("h").innerHTML = "c";
+    document.getElementById("i").innerHTML = "a";
+    document.getElementById("j").innerHTML = "b";
+    document.getElementById("k").innerHTML = "c";
+    document.getElementById("l").innerHTML = "a";
+
+  }, 1200);
+
+  setInterval(function () {
+    var date = new Date();
+    var h = date.getHours();          //获取小时
+    var m = date.getMinutes();        //获取分钟
+   ;
+    $("#date").val('北京时间' + h + ':' + m)
+    var d = document.getElementById('date')
+    d.innerHTML = '北京时间' + h + ':' + m;
+  }, 1000)
+
+  function hasClassName(inElement, inClassName) {
+    var regExp = new RegExp('(?:^|\\s+)' + inClassName + '(?:\\s+|$)');
+    return regExp.test(inElement.className);
+  }
+
+  function addClassName(inElement, inClassName) {
+    if (!hasClassName(inElement, inClassName))
+      inElement.className = [inElement.className, inClassName].join(' ');
+  }
+
+  function removeClassName(inElement, inClassName) {
+    if (hasClassName(inElement, inClassName)) {
+      var regExp = new RegExp('(?:^|\\s+)' + inClassName + '(?:\\s+|$)', 'g');
+      var curClasses = inElement.className;
+      inElement.className = curClasses.replace(regExp, ' ');
+    }
+  }
+
+  function toggleClassName(inElement, inClassName) {
+    if (hasClassName(inElement, inClassName))
+      removeClassName(inElement, inClassName);
+    else
+      addClassName(inElement, inClassName);
+  }
+
+  function toggleShape() {
+    var shape = document.getElementById('shape');
+    if (hasClassName(shape, 'ring')) {
+      removeClassName(shape, 'ring');
+      addClassName(shape, 'cube');
+    } else {
+      removeClassName(shape, 'cube');
+      addClassName(shape, 'ring');
+    }
+
+    // Move the ring back in Z so it's not so in-your-face.
+    var stage = document.getElementById('stage');
+    if (hasClassName(shape, 'ring'))
+      stage.style.webkitTransform = 'translateZ(-200px)';
+    else
+      stage.style.webkitTransform = '';
+  }
+
+  function toggleBackfaces() {
+    var backfacesVisible = document.getElementById('backfaces').checked;
+    var shape = document.getElementById('shape');
+    if (backfacesVisible)
+      addClassName(shape, 'backfaces');
+    else
+      removeClassName(shape, 'backfaces');
+  }
+
+
+
+</script>
+</body>
+</html>

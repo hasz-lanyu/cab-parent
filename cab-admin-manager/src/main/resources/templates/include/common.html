@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+  <title>CAB后台管理</title>
+</head>
+<body class="hold-transition sidebar-mini ">
+
+<div class="wrapper">
+  <!--css-->
+  <span id="css">
+
+    <!-- Font Awesome 图标 -->
+  <link rel="stylesheet" th:href="@{~/static/plugins/fontawesome-free/css/all.min.css}"
+        href="../../static/plugins/fontawesome-free/css/all.min.css">
+    <!-- 主题样式 -->
+  <link rel="stylesheet" th:href="@{~/static/dist/css/adminlte.min.css}"
+        href="../../static/dist/css/adminlte.min.css">
+    <link rel="stylesheet" th:href="@{~/static/bootstrap-table-master/dist/bootstrap-table.min.css}"
+          href="../../static/bootstrap-table-master/dist/bootstrap-table.min.css">
+    <link rel="stylesheet"  type="text/css"
+          th:href="@{~/static/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css}"
+          href="../../static/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
+  </span>
+  <!--------------------------------------------------------------------------------->
+
+  <!--请假-->
+  <span th:fragment="leave">
+
+    <div class="content-wrapper bg-navy"  >
+    <!-- 内容标题（页面标题） -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row-cols-lg-12">
+    <section class="content ">
+      <div class="row">
+        <div class="col">
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title ">假期申请</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                        data-toggle="tooltip" title="折叠">
+                  <i class="fas fa-minus"></i></button>
+              </div>
+            </div>
+            <div class="card-body row bg-navy">
+              <div class="col-sm-4">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button type="button"  class="btn btn-dark">假期标题</button>
+                  </div>
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+
+            <div class="col-sm-4">
+             <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button type="button"  class="btn btn-dark">开始时间</button>
+                  </div>
+                  <input class="form-control "
+                          id="beginTime"  type="text" placeholder="交易时间"
+                        />
+                </div>
+
+             </div>
+            <div class="col-sm-4">
+             <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button type="button"  class="btn btn-dark ">结束时间</button>
+                  </div>
+                  <input type="text" id="endTime" class="form-control ">
+                </div>
+              </div>
+
+              <div class="col-sm-4">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button type="button"  class="btn btn-dark">假期类型</button>
+                  </div>
+                   <select class="form-control custom-select">
+                  <option selected disabled>选择类型</option>
+                  <option>请假</option>
+                  <option>无薪休假</option>
+                  <option>带薪休假</option>
+                </select>
+                </div>
+              </div>
+              <div class="col-sm-9"></div>
+              <div class="col-sm-4">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button type="button"  class="btn btn-dark">假期天数</button>
+                  </div>
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button type="button"  class="btn btn-danger">假期原因</button>
+                  </div>
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+
+        <div class="col-6">
+          <button  class="btn btn-outline-warning">重置</button>
+          <button  class="btn btn-outline-success">提交</button>
+
+      </div>
+            </div>
+
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+    </section>
+      </div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="leaveTb"></table>
+      </div>
+        </div>
+      </div>
+  </span>
+
+  <!--------------------------------------------------------------------------------->
+
+  <!--模态框-->
+  <span th:fragment="usermodal">
+     <div class="modal fade " tabindex="-1" id="usermodals">
+        <div class="modal-dialog ">
+          <div class="modal-content  bg-secondary elevation-2">
+            <div class="modal-header">
+              <h4 class="modal-title">将要弹框</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+         <form class="form-horizontal" id="modalForm">
+           <input type="hidden" name="id" id="uid">
+                <div class="card-body ">
+                  <div class="form-group row ">
+                    <label for="username" class="col-sm-2 col-form-label">&nbsp;&nbsp;姓名</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control bg-secondary elevation-2"
+                             id="username" name="username" placeholder="账号">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="password" class="col-sm-2 col-form-label">&nbsp;&nbsp;密码</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control bg-secondary elevation-2"
+                             name="password"
+                             id="password" placeholder="密码">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="phone" class="col-sm-2 col-form-label">&nbsp;&nbsp;手机</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control bg-secondary elevation-2"
+                             name="phone" id="phone" placeholder="手机">
+                    </div>
+                  </div>
+				           <div class="form-group row">
+                    <label for="email" class="col-sm-2 col-form-label">&nbsp;&nbsp;邮箱</label>
+                    <div class="col-sm-8">
+                      <input type="email" class="form-control bg-secondary elevation-2"
+                             id="email" name="email" placeholder="邮箱">
+                    </div>
+                  </div>
+				  				    <div class="form-group row">
+                    <label for="address" class="col-sm-2 col-form-label">&nbsp;&nbsp;地址</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control bg-secondary elevation-2"
+                             id="address" name="address"
+                             placeholder="地址">
+                    </div>
+                  </div>
+
+                   <div class="form-group row">
+                    <label for="address"
+                           class="col-sm-2 col-form-label">&nbsp;&nbsp;部门</label>
+                    <div class="col-sm-8">
+                      <!-- select -->
+                        <select name="deptId" id="deptSelect"
+                                class="form-control bg-secondary elevation-2">
+
+
+                        </select>
+                    </div>
+                  </div>
+
+                   <label class="col-sm-2 col-form-label">性别</label>
+				             <div class="btn-group btn-group-toggle " data-toggle="buttons">
+
+                  <label id="maleclass" class="btn  btn-secondary active">
+                    <input type="radio" name="gender" id="male" autocomplete="off" value="1"
+                           checked="checked"
+                    >男
+                  </label>
+                  <label id="femaleclass" class="btn btn-secondary">
+                    <input type="radio" name="gender" id="female" autocomplete="off" value="0">女
+                  </label>
+                  </div>
+                </div>
+
+
+           <!-- /.card-body -->
+                <div class="card-footer ">
+                  <button type="button" th:onclick="operation()" onclick="operation()" id="userAdd"
+                          class="btn btn-info">添加</button>
+                  <button type="button" id="userCancel" class="btn btn-default float-right">取消
+                  </button>
+                </div>
+           </form>
+            </div>
+          </div>
+        </div>
+     </div>  </span>
+  <!--------------------------------------------------------------------------------->
+
+  <!--用户内容-->
+  <div th:fragment="userList" class="content-wrapper bg-gradient-secondary">
+    <!-- 内容标题（页面标题） -->
+    <div class="content-header">
+      <div th:replace="~{include/common::usermodal}"></div>
+      <div class="container-fluid bg-transparent">
+        <div class="row mb-6">
+
+          <div id="toolbar">
+            <button type="button" style="margin-left: 15px" id="addBtn"
+                    class="btn bg-gradient-primary btn-sm" onclick="usermodals()">添加
+            </button>
+            <button type="button" style="margin-left: 10px"
+                    class="btn bg-gradient-danger  btn-sm">删除
+            </button>
+
+          </div>
+
+          <div class="table-responsive bg-transparent">
+            <table id="usertb" class="table table-bordered table-striped with-check">
+
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--------------------------------------------------------------------------------->
+
+  <!--左侧侧边栏-->
+  <span th:fragment="navbar">
+     <nav class="main-header navbar navbar-expand border-bottom-0 navbar-dark navbar-gray">
+    <!-- 左侧导航栏链接 -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
+                class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a th:href="@{/}" href="index3.html" class="nav-link">主页</a>
+      </li>
+    </ul>
+
+
+       <!-- 右侧导航栏链接 -->
+    <ul class="navbar-nav ml-auto">
+      <!-- 消息下拉菜单 -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-comments"></i>
+          <span class="badge badge-danger navbar-badge">3</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="#" class="dropdown-item">
+            <!-- 消息开始 -->
+            <div class="media">
+
+              <img src="dist/img/user1-128x128.jpg" alt="用户头像"
+                   class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Brad Diesel
+                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">有空的话就打电话给我...</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 小时前</p>
+              </div>
+            </div>
+            <!-- 消息结束 -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- 消息开始 -->
+            <div class="media">
+              <img src="dist/img/user8-128x128.jpg" alt="用户头像" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  John Pierce
+                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">我收到你的消息了</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 小时前</p>
+              </div>
+            </div>
+            <!-- 消息结束 -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- 消息开始 -->
+            <div class="media">
+              <img src="dist/img/user3-128x128.jpg" alt="用户头像" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Nora Silvester
+                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">主题在这里</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 小时前</p>
+              </div>
+            </div>
+            <!-- 消息结束 -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">查看所有消息</a>
+        </div>
+      </li>
+      <!-- 通知下拉菜单 -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge">15</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-header">15 条通知</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 条新消息
+            <span class="float-right text-muted text-sm">3 分钟前</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-users mr-2"></i> 8 个好友请求
+            <span class="float-right text-muted text-sm">12 小时前</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> 3 个新报告
+            <span class="float-right text-muted text-sm">2 天前</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">查看所有通知</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"
+           role="button"><i
+                class="fas fa-th-large"></i></a>
+      </li>
+    </ul>
+  </nav>
+    <!-- /.navbar -->
+
+    <!-- 主侧边栏容器 -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- 品牌 Logo -->
+    <a href="login.html" class="brand-link">
+      <img th:src="@{~/static/icon/log.png}" alt="Adm"
+           class="brand-image img-circle elevation-3"
+           style="opacity: .8">
+      <span class="brand-text font-weight-light">CAB控制台</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- 侧边栏用户面板（可选） -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img th:src="${session.r.data.file}" src="dist/img/user2-160x160.jpg"
+               class="img-circle elevation-2" alt="用户头像">
+
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">用户：<span th:text="${session.r.data.username}"></span></a>
+        </div>
+      </div>
+
+      <!-- 主侧边栏菜单 -->
+      <input type="hidden" id="info" th:value="${r==null?null:r.code}"/>
+      <nav class="mt-2">
+
+        <ul class="nav nav-pills nav-sidebar flex-column  "
+            data-widget="treeview" role="menu" data-accordion="false">
+
+          <li th:each="menu :${r.data}" class="nav-item has-treeview ">
+            <a href="#" class="menubtn nav-link">
+              <i th:class="${menu.icon==null?'fa fa-th-list':menu.icon}" class=" fa fa-opera"></i>
+              <p style="text-indent: 25px" th:text="${menu.name}">
+                一 级
+              </p>
+              <i class="right fas fa-angle-left"></i>
+            </a>
+
+            <ul class=" nav-treeview" th:each="childs :${menu.child}"
+
+                th:if="${menu.child!=null}">
+
+              <!--单个的-->
+              <li class="bg nav-item"
+                  th:if="${childs.child==null}">
+                <a href="javascript:volid(0);" th:onclick="req([[${childs.path}]]);"
+                   class="d mainbtn nav-link ">
+                  <i class="ico far fa-circle nav-icon"></i>
+                  <p th:text="${childs.name}">二级</p>
+                </a>
+              </li>
+              <!--多个-->
+
+              <!-- 使用 .nav-icon 类添加图标，
+                   或使用 font-awesome 或其他任何图标字体库 -->
+              <li class="nvv  nav-item has-treeview   nav-sidebar flex-column  bg-gradient-dark"
+                  th:if="${childs.child!=null}">
+                <a href="javascript:volid(0);" class="mainbtn nav-link ">
+                  <!-- <i class="right fas fa-angle-left nav-icon"></i>-->
+                  <i class=" ico far fa-circle nav-icon"></i>
+                  <p th:text="${childs.name}">
+                    起始页
+                  </p>
+                  <i class="right fas fa-angle-left"></i>
+                </a>
+                <ul class=" nv nav-treeview " th:each="child:${childs.child}">
+                  <li class="sn nav-item bg-gradient-white">
+                    <a href="javascript:volid(0);" th:onclick="req([[${child.path}]]);"
+                       class="subbtn nav-link">
+                      <i class=" ico far fa-circle nav-icon"></i>
+                      <p th:text="${child.name}">当前页</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
+    </div>
+
+  </aside>
+  </span>
+  <!--------------------------------------------------------------------------------->
+
+  <!--侧边栏-->
+  <span th:fragment="sidebar" id="sidebar">
+     <aside class="control-sidebar control-sidebar-dark">
+    <!-- 控制侧边栏内容在这里 -->
+    <div class="p-3">
+<!--      <h5>标题</h5>
+      <p>侧边栏内容</p>-->
+    </div>
+  </aside>
+  </span>
+  <!--------------------------------------------------------------------------------->
+
+  <!--页脚-->
+  <span th:fragment="footer" id="footer">
+<footer class="main-footer bg-black">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline ">
+      任何你想要的
+    </div>
+  <!-- Default to the left -->
+
+    <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+    保留所有权利。
+  </footer>
+  </span>
+  <!--------------------------------------------------------------------------------->
+</div>
+
+<!-- jQuery -->
+<span id="js">
+
+  <script th:src="@{~/static/plugins/jquery/jquery.min.js}"
+          src="../../static/plugins/jquery/jquery.min.js"></script>
+  <script th:src="@{~/static/jquery/layer/layer.js  }"
+            src="../../static/jquery/layer/layer.js"></script>
+    <!-- Bootstrap 4 -->
+  <script th:src="@{~/static/plugins/bootstrap/js/bootstrap.bundle.min.js}"
+          src="../../static/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+  <script th:src="@{~/static/dist/js/adminlte.min.js}"
+          src="../../static/dist/js/adminlte.min.js"></script>
+  <script th:src="@{~/static/dist/js/demo.js}" src="../../static/dist/js/demo.js"></script>
+  <script th:src="@{~/static/bootstrap-table-master/dist/bootstrap-table.min.js}"
+            src="../../static/bootstrap-table-master/dist/bootstrap-table.min.js"></script>
+  <script th:src="@{~/static/bootstrap-table-master/dist/locale/bootstrap-table-zh-CN.min.js}"
+            src="../../static/bootstrap-table-master/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+  <script th:src="@{~/static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js}"
+          src="../../static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"
+          charset="UTF-8">
+  </script>
+
+  <script th:src="@{~/static/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js}"
+             src="../../static/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"
+          charset="UTF-8"></script>
+
+
+
+  <script type="text/javascript">
+
+    $('#leaveTb').bootstrapTable({
+      sortable: true,                     //是否启用排序
+      sortOrder: "desc",                   //排序方式
+      sortName: 'create_time',             //默认根据那个字段排序
+      //  striped: false,               //换行变色
+      //查询数据的接口地址
+      url: '/leave',
+      method: 'get',
+      //查询参数，可以用于增加表格的筛选条件，在下文的function queryParams()中实现
+      queryParams: queryParams,
+      //设置接口返回值中用于填充表格数据的字段
+      //发送restful风格参数
+      // queryParamsType:'limit',
+      dataField: "data",
+      contentType: "application/json",
+      sidePagination: 'server',
+
+      //禁用缓存  级别
+      cache: false,
+      toolbar: '#toolbar',                //工具按钮用哪个容器
+      //   buttonsAlign:right,             //工具栏按钮的位置
+      //表格高度
+      //height: 200,
+      search: true,                       //是否显示表格搜索，此搜索是客户端搜索
+
+      clickToSelect: true,                //是否启用点击选中行
+      showRefresh: true,                  //是否显示刷新按钮
+
+      //接口返回数据的处理方法，使用该方法可以控制生成该组件所需的total和data字段
+      responseHandler: responseHandler,
+      pagination: true,
+      pageNumber: 1,
+      pageSize: 5,
+      pageList: [10, 30, 100],
+      //列，此处举例：序号生成方法+列按钮如何添加事件，并非上图对应的列信息
+      columns: [
+        {
+          checkbox: true
+        }, {
+          field: 'title',
+          title: '标题',
+          /*    formatter:function(value,row,index){
+                var pageSize=$('#dataxJobInfoTable').bootstrapTable('getOptions').pageSize;
+                var pageNumber=$('#dataxJobInfoTable').bootstrapTable('getOptions').pageNumber;
+                return pageSize * (pageNumber - 1) + index + 1;
+              }*/
+        }, {
+          field: '天数',
+          title: 'day',
+          sortable: true,
+        }, {
+          field: 'beginTime',
+          title: '开始',
+        }, {
+          field: 'endTime',
+          title: '结束',
+        }, {
+          field: 'remark',
+          title: '备注',
+
+        } ,  {
+          field: 'status',
+          title: '状态',
+          formatter: function (value, row, index) {
+            return '<a id="edit" class="btn btn-success btn-xs" style="margin-left:10px"><i class="fa fa-eye"></i> 编辑</a>'
+                +
+                '<a id="delete" class="btn btn-danger btn-xs"  style="margin-left:10px"><i class="fa fa-close"></i> 删除</a>';
+          },
+
+          //可以为该列绑定事件，如下所示，每个按钮绑定了事件
+          events: {
+            'click #delete': function (e, value, row, index) {
+              //动态控制模态框的显示内容，为模态框的按钮动态的绑定事件，包括删除事件和执行事件，
+              //这样模态框就可以复用
+              layer.confirm('确定删除?', {btn: ['删除', '取消']}, function (index) {
+                deleteUser(row.id);
+                layer.close(index);
+              });
+              // $("#opDataxJobRowModal").modal();
+            },
+            'click #runDataxJob': function (e, value, row, index) {
+              $("#warningText").text("确认执行任务： " + row.dataxJobName + " ?");
+              $("#confirmBtn").text("执行");
+              $("#confirmBtn").on("click", function () {
+                runDataxJob(row);
+              });
+              $("#opDataxJobRowModal").modal();
+
+            },
+            'click #pauseJob': function (e, value, row, index) {
+              $("#warningText").text("是否暂停任务： " + row.dataxJobName + " ?");
+              $("#confirmBtn").text("暂停");
+              $("#confirmBtn").on("click", function () {
+                pauseJob(row.xxlJobId)
+              });
+              $("#opDataxJobRowModal").modal();
+            },
+            'click #edit': function (e, value, row, index) {
+              document.getElementById("modalForm").reset();
+              var exit = $("#deptSelect").find("option[value='" + row.deptId + "']").val();
+              if (!exit) {
+                $.ajax({
+                  url: '/dept',
+                  type: 'GET',
+                  dataType: 'json',
+                  data: {},
+                  success: function (r) {
+                    var dept = r.data
+                    for (let i = 0; i < dept.length; i++) {
+                      if (row.deptId == dept[i].id) {
+                        $("#deptSelect").append("<option selected='true' value='" + dept[i].id + "'>" + dept[i].name + "</option>");
+                      } else {
+                        $("#deptSelect").append("<option value='" + dept[i].id + "'>" + dept[i].name + "</option>");
+                      }
+
+
+                    }
+
+                  }
+                })
+              }
+
+              $('.modal-title').html('修改用户');
+              $("#userAdd").html('修改');
+              $('#uid').val(row.id);
+              $('#username').val(row.username);
+              $('#password').val(row.password);
+              $('#phone').val(row.phone);
+              $('#email').val(row.email);
+              $('#address').val(row.address);
+              $("#deptSelect").find("option[value='" + row.deptId + "']").attr("selected", true);
+
+              if (row.gender == 1) {
+                $('#female').attr('checked', 'checked');
+                $('#male').removeAttr('checked');
+                $('#maleclass').removeClass('active');
+                $('#femaleclass').addClass('active');
+              } else {
+                $('#male').attr('checked', 'checked');
+                $('#female').removeAttr('checked')
+              }
+              $("#usermodals").modal({
+                keyboard: true
+              })
+            }
+          }
+        },
+
+        {
+          field: 'assign',
+          title: '分配',
+          formatter: function (value, row, index) {
+            return '<a id="role" class="btn btn-primary btn-xs" style="margin-left:10px"> 角色</a>'
+                +
+                '<a id="permission" class="btn btn-info btn-xs"  style="margin-left:10px">权限</a>';
+          },
+          /*
+                    events: {
+                      'click #delete': function (e, value, row, index) {
+                        //动态控制模态框的显示内容，为模态框的按钮动态的绑定事件，包括删除事件和执行事件，
+                        //这样模态框就可以复用
+                        layer.confirm('确定删除?', {btn: ['删除', '取消']}, function (index) {
+                          deleteUser(row.id);
+                          layer.close(index);
+                        });
+                        // $("#opDataxJobRowModal").modal();
+                      },
+                      'click #runDataxJob': function (e, value, row, index) {
+                        $("#warningText").text("确认执行任务： " + row.dataxJobName + " ?");
+                        $("#confirmBtn").text("执行");
+                        $("#confirmBtn").on("click", function () {
+                          runDataxJob(row);
+                        });
+                        $("#opDataxJobRowModal").modal();
+
+                      },
+                    },
+          */
+
+        }]
+
+
+    });
+
+    var currentTime = new Date();
+    var currMill =currentTime.getTime();
+     currentTime.setTime(currMill+1000 * 60 * 60 * 24*40);
+
+	$("#beginTime").datetimepicker({
+    language : 'zh-CN',
+    weekStart : 1,
+    todayBtn : 1,
+    autoclose : 1,
+    todayHighlight : 1,
+    startView : 2,
+    minView: 0,
+    format: 'yyyy-mm-dd HH:ii ',
+    forceParse : 0,
+    startDate : new Date()
+
+  }).on('hide', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var startTime = event.date;
+    var millTime =startTime.getTime();
+    startTime.setTime(millTime-1000*60*60*8);
+    $('#endTime').datetimepicker('setStartDate',startTime);
+    $('#endTime').val("");
+  });
+  $("#endTime").datetimepicker({
+    language : 'zh-CN',
+    weekStart : 1,
+    todayBtn : 1,
+    autoclose : 1,
+    todayHighlight : 1,
+    startView : 2,
+    minView: "hour",
+    format: 'yyyy-mm-dd HH:ii ',
+    forceParse : 0,
+    endDate:currentTime
+  }).on('hide', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var endTime = event.date;
+
+    $('#beginTime').datetimepicker('setEndDate',endTime);
+  });
+
+
+
+    function operation() {
+
+      //获取隐藏input的id 如有有就是修改 没有就是新增
+      var id = $("#uid").val();
+      var username = $("#username").val();
+      var password = $("#password").val();
+      var phone = $("#phone").val();
+      var email = $("#email").val();
+      var gender = $('input[name=gender]:checked').val();
+      var address = $("#address").val();
+      var deptId = $('#deptSelect').val();
+
+      if (id) {
+        //不是空 修改
+        $.ajax({
+          url: '/user',
+          type: 'PUT',
+          contentType: 'application/json',
+          dataType: 'json',
+          data: JSON.stringify({
+            id: id,
+            username: username,
+            password: password,
+            phone: phone,
+            email: email,
+            gender: gender,
+            address: address,
+            deptId: deptId
+          }),
+          success: function (r) {
+            if (r.code == 200) {
+              layer.msg('修改成功', {time: 1500});
+              $('#usermodals').modal('hide');
+              $("#usertb").bootstrapTable('refresh');
+            } else {
+              layer.msg('修改失败' + r.message, {time: 2000});
+            }
+          },
+          error: function (XMLHttpRequest) {
+            layer.msg('数据异常:' + XMLHttpRequest.status, {time: 2500});
+
+          }
+        })
+      } else {
+        //新增
+        $.ajax({
+          url: '/user',
+          type: 'POST',
+          contentType: 'application/json',
+          dataType: 'json',
+          data: JSON.stringify({
+            username: username,
+            password: password,
+            phone: phone,
+            email: email,
+            gender: gender,
+            address: address,
+            deptId: deptId
+          }),
+          success: function (r) {
+            if (r.code == 200) {
+              layer.msg('添加成功', {time: 1500});
+              $('#usermodals').modal('hide');
+              $("#usertb").bootstrapTable('refresh');
+            } else {
+              layer.msg('添加失败' + r.message, {time: 2000});
+            }
+          },
+          error: function (XMLHttpRequest) {
+            layer.msg('数据异常:' + XMLHttpRequest.status, {time: 2500});
+
+          }
+        })
+      }
+
+    }
+
+
+    $(function () {
+      $(".menubtn").click(function () {
+        $(".menubtn").removeClass('active');
+        $(this).addClass('active');
+
+      });
+
+      $(".mainbtn").click(function () {
+        $(".mainbtn").removeClass("bg-gradient-lightblue");
+        $(this).addClass("bg-gradient-lightblue");
+        $(".ico").removeClass('fa fa-stop-circle');
+        $(this).children(".ico").addClass('fa fa-stop-circle');
+        $('.subbtn').removeClass("active")
+        /*      $('.nv').attr('style','display: none')
+              $(this).parent('ul').attr('style','display: block')*/
+
+      })
+
+      $(".subbtn").click(function () {
+        $(".subbtn").removeClass('active');
+        $(this).addClass('active');
+        $(".ico").removeClass('fa fa-stop-circle');
+        $(this).children("i").addClass('fa fa-stop-circle');
+        $('.d').removeClass("bg-gradient-lightblue")
+      })
+
+
+    });
+
+
+    function deleteUser(id) {
+      $.ajax({
+        url: '/user/' + id,
+        type: 'DELETE',
+        dataType: 'json',
+        success: function (r) {
+          if (r.code == 200) {
+            layer.msg('删除成功', {time: 1500});
+            $("#usertb").bootstrapTable('refresh');
+          } else {
+            layer.msg(r.message, {time: 2000});
+          }
+        },
+        error: function (XMLHttpRequest) {
+          layer.msg('数据异常:' + XMLHttpRequest.status, {time: 2500});
+
+        }
+      })
+
+    }
+
+
+    //添加模态框
+    function usermodals() {
+      document.getElementById("modalForm").reset();
+      $('#deptSelect').empty();
+      $('#uid').removeAttr('value');
+      var val = $('#deptSelect').val();
+      if (!val) {
+        $.ajax({
+          url: '/dept',
+          type: 'GET',
+          dataType: 'json',
+          data: {},
+          success: function (r) {
+            var dept = r.data
+            for (let i = 0; i < dept.length; i++) {
+              $("#deptSelect").append("<option value='" + dept[i].id + "'>" + dept[i].name + "</option>");
+
+            }
+
+          }
+        })
+      }
+
+      $('.modal-title').html('添加用户');
+      $('#userAdd').html('添加');
+      $("#usermodals").modal({
+        backdrop: 'static',
+
+      });
+    };
+
+    function refreshtb(path) {
+      if (path == '/user/list') {
+        $('#usertb').bootstrapTable({
+          sortable: true,                     //是否启用排序
+          sortOrder: "desc",                   //排序方式
+          sortName: 'id',             //默认根据那个字段排序
+        //  striped: false,               //换行变色
+          //查询数据的接口地址
+          url: '/user',
+          method: 'get',
+          //查询参数，可以用于增加表格的筛选条件，在下文的function queryParams()中实现
+          queryParams: queryParams,
+          //设置接口返回值中用于填充表格数据的字段
+          //发送restful风格参数
+          // queryParamsType:'limit',
+          dataField: "data",
+          contentType: "application/json",
+          sidePagination: 'server',
+          //是否显示视图切换
+          showToggle: true,
+          //禁用缓存  级别
+          cache: false,
+          toolbar: '#toolbar',                //工具按钮用哪个容器
+          //   buttonsAlign:right,             //工具栏按钮的位置
+          //表格高度
+          //height: 200,
+          search: true,                       //是否显示表格搜索，此搜索是客户端搜索
+
+          clickToSelect: true,                //是否启用点击选中行
+          showRefresh: true,                  //是否显示刷新按钮
+
+          //接口返回数据的处理方法，使用该方法可以控制生成该组件所需的total和data字段
+          responseHandler: responseHandler,
+          pagination: true,
+          pageNumber: 1,
+          pageSize: 5,
+          pageList: [10, 30, 100],
+          //列，此处举例：序号生成方法+列按钮如何添加事件，并非上图对应的列信息
+          columns: [
+            {
+              checkbox: true
+            }, {
+              field: 'id',
+              title: 'id',
+              /*    formatter:function(value,row,index){
+                    var pageSize=$('#dataxJobInfoTable').bootstrapTable('getOptions').pageSize;
+                    var pageNumber=$('#dataxJobInfoTable').bootstrapTable('getOptions').pageNumber;
+                    return pageSize * (pageNumber - 1) + index + 1;
+                  }*/
+            }, {
+              field: 'workId',
+              title: '代号',
+              sortable: true,
+            }, {
+              field: 'username',
+              title: '用户名',
+            }, {
+              field: 'deptName',
+              title: '部门',
+            }, {
+              field: 'phone',
+              title: '手机',
+              visible: false,
+            }, {
+              field: 'email',
+              title: '邮箱',
+              visible: false,
+            }, {
+              field: 'gender',
+              title: '性别',
+              visible: false,
+            }, {
+              field: 'address',
+              title: '地址',
+              visible: false,
+            }, {
+              field: 'createTime',
+              title: '创建时间',
+              visible: false,
+
+            }, {
+              field: 'password',
+              title: '密码',
+              visible: false,
+            }, {
+              field: 'operate',
+              title: '操作',
+              formatter: function (value, row, index) {
+                return '<a id="edit" class="btn btn-success btn-xs" style="margin-left:10px"><i class="fa fa-eye"></i> 编辑</a>'
+                    +
+                    '<a id="delete" class="btn btn-danger btn-xs"  style="margin-left:10px"><i class="fa fa-close"></i> 删除</a>';
+              },
+
+              //可以为该列绑定事件，如下所示，每个按钮绑定了事件
+              events: {
+                'click #delete': function (e, value, row, index) {
+                  //动态控制模态框的显示内容，为模态框的按钮动态的绑定事件，包括删除事件和执行事件，
+                  //这样模态框就可以复用
+                  layer.confirm('确定删除?', {btn: ['删除', '取消']}, function (index) {
+                    deleteUser(row.id);
+                    layer.close(index);
+                  });
+                  // $("#opDataxJobRowModal").modal();
+                },
+                'click #runDataxJob': function (e, value, row, index) {
+                  $("#warningText").text("确认执行任务： " + row.dataxJobName + " ?");
+                  $("#confirmBtn").text("执行");
+                  $("#confirmBtn").on("click", function () {
+                    runDataxJob(row);
+                  });
+                  $("#opDataxJobRowModal").modal();
+
+                },
+                'click #pauseJob': function (e, value, row, index) {
+                  $("#warningText").text("是否暂停任务： " + row.dataxJobName + " ?");
+                  $("#confirmBtn").text("暂停");
+                  $("#confirmBtn").on("click", function () {
+                    pauseJob(row.xxlJobId)
+                  });
+                  $("#opDataxJobRowModal").modal();
+                },
+                'click #edit': function (e, value, row, index) {
+                  document.getElementById("modalForm").reset();
+                  var exit = $("#deptSelect").find("option[value='" + row.deptId + "']").val();
+                  if (!exit) {
+                    $.ajax({
+                      url: '/dept',
+                      type: 'GET',
+                      dataType: 'json',
+                      data: {},
+                      success: function (r) {
+                        var dept = r.data
+                        for (let i = 0; i < dept.length; i++) {
+                          if (row.deptId == dept[i].id) {
+                            $("#deptSelect").append("<option selected='true' value='" + dept[i].id + "'>" + dept[i].name + "</option>");
+                          } else {
+                            $("#deptSelect").append("<option value='" + dept[i].id + "'>" + dept[i].name + "</option>");
+                          }
+
+
+                        }
+
+                      }
+                    })
+                  }
+
+                  $('.modal-title').html('修改用户');
+                  $("#userAdd").html('修改');
+                  $('#uid').val(row.id);
+                  $('#username').val(row.username);
+                  $('#password').val(row.password);
+                  $('#phone').val(row.phone);
+                  $('#email').val(row.email);
+                  $('#address').val(row.address);
+                  $("#deptSelect").find("option[value='" + row.deptId + "']").attr("selected", true);
+
+                  if (row.gender == 1) {
+                    $('#female').attr('checked', 'checked');
+                    $('#male').removeAttr('checked');
+                    $('#maleclass').removeClass('active');
+                    $('#femaleclass').addClass('active');
+                  } else {
+                    $('#male').attr('checked', 'checked');
+                    $('#female').removeAttr('checked')
+                  }
+                  $("#usermodals").modal({
+                    keyboard: true
+                  })
+                }
+              }
+            },
+
+            {
+              field: 'assign',
+              title: '分配',
+              formatter: function (value, row, index) {
+                return '<a id="role" class="btn btn-primary btn-xs" style="margin-left:10px"> 角色</a>'
+                    +
+                    '<a id="permission" class="btn btn-info btn-xs"  style="margin-left:10px">权限</a>';
+              },
+              /*
+                        events: {
+                          'click #delete': function (e, value, row, index) {
+                            //动态控制模态框的显示内容，为模态框的按钮动态的绑定事件，包括删除事件和执行事件，
+                            //这样模态框就可以复用
+                            layer.confirm('确定删除?', {btn: ['删除', '取消']}, function (index) {
+                              deleteUser(row.id);
+                              layer.close(index);
+                            });
+                            // $("#opDataxJobRowModal").modal();
+                          },
+                          'click #runDataxJob': function (e, value, row, index) {
+                            $("#warningText").text("确认执行任务： " + row.dataxJobName + " ?");
+                            $("#confirmBtn").text("执行");
+                            $("#confirmBtn").on("click", function () {
+                              runDataxJob(row);
+                            });
+                            $("#opDataxJobRowModal").modal();
+
+                          },
+                        },
+              */
+
+            }]
+        });
+      }
+
+    }
+
+    //使用组件生成表格
+
+
+    //生成查询参数
+    function queryParams(params) {
+      var search = $('.search').children('input').val();
+      return {
+        pageSize: params.limit,
+        pageNumber: params.offset / params.limit + 1,
+        key: search
+        //这里就俩条件：任务名称和任务描述
+        /*      dataxJobName: $("#dataxJobName").val(),
+              jobDesc: $("#jobDesc").val()*/
+      }
+    }
+
+    //请求成功将后端返回的数据进行处理以满足bootstrap-table
+    function responseHandler(r) {
+      if (r.code == "9999") {
+        return {
+          total: 0, //总页数,前面的key必须为"total"
+          data: null //行数据，前面的key要与之前设置的dataField的值一致.
+        }
+      }
+      //如果没有错误则返回数据，渲染表格
+      return {
+        total: r.total, //总页数,前面的key必须为"total"
+        data: r.data //行数据，前面的key要与之前设置的dataField的值一致.
+      };
+    };
+
+    function req(path) {
+
+      if (path) {
+        $.ajax({
+          type: 'GET',
+          url: path,
+          data: {},
+          success: function (r) {
+            $('#content').empty();
+            $('#content').append(r);
+            refreshtb(path);
+          }
+        })
+      }
+
+    }
+</script>
+</span>
+</body>
+</html>

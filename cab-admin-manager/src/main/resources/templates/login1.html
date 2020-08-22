@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keys" content="">
+    <meta name="author" content="">
+    <div th:include="~{include/common::#css}"></div>
+    <style>
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <div><a class="navbar-brand" href="indexs.html" style="font-size:32px;">尚筹网-创意产品众筹平台</a></div>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+    <form class="form-signin" role="form" id="loginForm" th:action="@{/doLogin}" method="post">
+        <h2 class="form-signin-heading"><i class="glyphicon glyphicon-log-in"></i> 用户登录</h2>
+        <div class="form-group has-success has-feedback">
+            <input type="text" class="form-control" name="loginacct" id="loginacct" placeholder="请输入登录账号" autofocus>
+            <span th:if="${msg !=null}" th:text="${msg}"></span>
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        </div>
+        <div class="form-group has-success has-feedback">
+            <input type="text" class="form-control" name="password" id="password" placeholder="请输入登录密码"
+                   style="margin-top:10px;">
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="form-group has-success has-feedback">
+            <select class="form-control">
+                <optifon th:name="type" th:value="member" value="member">会员</optifon>
+                <option th:name="type" th:value="user" value="user">管理</option>
+            </select>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> 记住我
+            </label>
+            <br>
+            <label>
+                忘记密码
+            </label>
+            <label style="float:right">
+                <a th:href="@{/toRegist}" href="reg.html">我要注册</a>
+            </label>
+        </div>
+        <a class="btn btn-lg btn-success btn-block" th:onclick="dologin()" > 登录</a>
+    </form>
+</div>
+<div th:include="~{include/common::#js}"></div>
+<script>
+
+    function dologin() {
+        var type = $(":selected").val();
+        var loginacct = $("#loginacct").val();
+        var password = $("#password").val();
+        // layer.msg('111111')
+
+        if (loginacct == '' || password == '') {
+            //  alert("111111111")
+            layer.msg("用户或密码不能为空", {time: 1500}, function () {
+                // alert("2222")
+            });
+            return;
+        }
+        $("#loginForm").submit();
+        var code =$("#resp").val
+        if (code) {
+            layer.msg("用户或密码错误",{time:2000})
+        }
+        // $.get("/doLogin",{loginacct:loginacct,password:password,type:type})
+
+
+    }
+
+    $(function(){
+      //使用组件生成表格
+      $('#dataxJobInfoTable').bootstrapTable({
+        //换行变色
+        striped: true,
+        //查询数据的接口地址
+        url:serverUrl,
+        method:'get',
+        //查询参数，可以用于增加表格的筛选条件，在下文的function queryParams()中实现
+        queryParams:queryParams,
+        //设置接口返回值中用于填充表格数据的字段
+        dataField:"data",
+        contentType:"application/json",
+        pageNumber:1,
+        sidePagination:'server',
+        //接口返回数据的处理方法，使用该方法可以控制生成该组件所需的total和data字段
+        responseHandler:responseHandler,
+        pagination:true,
+        pageSize:5,
+        pageList:[10,30,100],
+        //列，此处举例：序号生成方法+列按钮如何添加事件，并非上图对应的列信息
+        columns: [{
+          field: 'number',
+          title: '序号',
+          formatter:function(value,row,index){
+            var pageSize=$('#dataxJobInfoTable').bootstrapTable('getOptions').pageSize;
+            var pageNumber=$('#dataxJobInfoTable').bootstrapTable('getOptions').pageNumber;
+            return pageSize * (pageNumber - 1) + index + 1;
+          }
+        },{
+          field: '',
+          title: '',
+          visible:false
+        }, {
+          field: 'operate',
+          title: '操作',
+          formatter:function(value,row,index){
+            return '<a  id="runDataxJob" class="btn btn-xs btn-warning"><i class="fa fa-edit"></i> 执行</a>'
+                +'<a id="resumeJob" class="btn btn-warning btn-xs" style="margin-left:10px"><i class="fa fa-eye"></i>恢复</a>'
+                +'<a id="viewDataxJobLog" class="btn btn-success btn-xs" style="margin-left:10px"><i class="fa fa-eye"></i> 日志</a>'
+                +'<a id="deleteDataxJobRow" class="btn btn-danger btn-xs" style="margin-left:10px"><i class="fa fa-close"></i> 删除</a>';
+          },
+          //可以为该列绑定事件，如下所示，每个按钮绑定了事件
+          events: {
+            'click #deleteDataxJobRow': function (e, value, row, index) {
+              //动态控制模态框的显示内容，为模态框的按钮动态的绑定事件，包括删除事件和执行事件，
+              //这样模态框就可以复用
+              $("#warningText").text("是否删除任务： " +row.dataxJobName + " ?");
+              $("#confirmBtn").text("删除");
+              $("#confirmBtn").on("click",function(){
+                deleteRowById(row.id)
+              });
+              $("#opDataxJobRowModal").modal();
+            },
+            'click #runDataxJob': function (e, value, row, index) {
+              $("#warningText").text("确认执行任务： " +row.dataxJobName + " ?");
+              $("#confirmBtn").text("执行");
+              $("#confirmBtn").on("click",function(){
+                runDataxJob(row);
+              });
+              $("#opDataxJobRowModal").modal();
+
+            },
+            'click #pauseJob': function (e, value, row, index) {
+              $("#warningText").text("是否暂停任务： " +row.dataxJobName + " ?");
+              $("#confirmBtn").text("暂停");
+              $("#confirmBtn").on("click",function(){
+                pauseJob(row.xxlJobId)
+              });
+              $("#opDataxJobRowModal").modal();
+            },
+            'click #resumeJob': function (e, value, row, index) {
+              $("#warningText").text("是否恢复任务： " +row.dataxJobName + " ?");
+              $("#confirmBtn").text("恢复");
+              $("#confirmBtn").on("click",function(){
+                resumeJob(row.xxlJobId)
+              });
+              $("#opDataxJobRowModal").modal();
+            },
+            'click #viewDataxJobLog': function (e, value, row, index) {
+              toLogListPage(row);
+            }
+          }
+        }]
+      });
+      //当模态框隐去的时候取消绑定的事件，下一次再动态绑定
+      $('#opDataxJobRowModal').on('hidden.bs.modal', function (event) {
+        $("#confirmBtn").unbind();
+      })
+    });
+
+    //生成查询参数
+    function queryParams(params){
+      return{
+        pageSize: params.limit,
+        pageNum:params.offset/params.limit+1,
+        //这里就俩条件：任务名称和任务描述
+        dataxJobName:$("#dataxJobName").val(),
+        jobDesc:$("#jobDesc").val()
+      }
+    }
+
+    //请求成功将后端返回的数据进行处理以满足bootstrap-table
+    function responseHandler(result){
+      var errcode = result.status;
+      if(errcode == "9999"){
+        return {
+          total : 0, //总页数,前面的key必须为"total"
+          data : null //行数据，前面的key要与之前设置的dataField的值一致.
+        }
+      }
+      //如果没有错误则返回数据，渲染表格
+      return {
+        total : result.data.total, //总页数,前面的key必须为"total"
+        data : result.data.list //行数据，前面的key要与之前设置的dataField的值一致.
+      };
+    };
+
+</script>
+</body>
+</html>
