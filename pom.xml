@@ -39,7 +39,7 @@
         <java.version>1.8</java.version>
         <junit.version>4.12</junit.version>
         <tk-mybatis.version>2.1.5</tk-mybatis.version>
-        <mysql.version>5.1.40</mysql.version>
+        <mysql.version>8.0.16</mysql.version>
         <dubbo-starter.version>0.2.0</dubbo-starter.version>
         <zookeeper.version>3.4.10</zookeeper.version>
         <curator-framework.version>2.10.0</curator-framework.version>
