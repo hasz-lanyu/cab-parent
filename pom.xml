@@ -37,7 +37,7 @@
         <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <java.version>1.8</java.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <tk-mybatis.version>2.1.5</tk-mybatis.version>
         <mysql.version>5.1.40</mysql.version>
         <dubbo-starter.version>0.2.0</dubbo-starter.version>
